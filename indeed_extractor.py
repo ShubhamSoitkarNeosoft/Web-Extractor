@@ -11,7 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 class ScrapNaukriJobs:
 
     BASE_URL = 'https://in.indeed.com'
-    FILE_NAME = 'scrap_indeed_jobs_ui_ux.csv'
+    FILE_NAME = 'indeed_jobs_python.csv'
 
     def __init__(self, language):
         options = webdriver.ChromeOptions()
@@ -23,7 +23,7 @@ class ScrapNaukriJobs:
         self.job_detail_links = []
 
     def get_job_detail_links(self):
-        for page in range(0, 1):
+        for page in range(0, 4):
             query_param = f'{self.language}-jobs'
             time.sleep(5)
             URL = f"https://in.indeed.com/jobs?q={self.language}&start={page*10}"
@@ -53,33 +53,34 @@ class ScrapNaukriJobs:
             except:
                 company_url.append('NA')
 
-            salary = soup.findAll(attrs={'class':"jobsearch-JobMetadataHeader-item"})
+            salary = soup.findAll(
+                attrs={'class': "jobsearch-JobMetadataHeader-item"})
             if salary:
                 for i in salary:
-                        x = i.find('span')
-                        if x:
-                            salary_list.append(x.text)
-                        else:
-                            salary_list.append('NA')
+                    x = i.find('span')
+                    if x:
+                        salary_list.append(x.text)
+                    else:
+                        salary_list.append('NA')
             else:
                 salary_list.append('NA')
 
-            description = soup.findAll(attrs={'class':"jobsearch-jobDescriptionText"})
+            description = soup.findAll(
+                attrs={'class': "jobsearch-jobDescriptionText"})
             # description_list.append(description.string)
             if description:
                 for i in description:
                     description_list.append(i.text)
             else:
                 description_list.append('NA')
-            print(len(description_list),len(company_url),len(salary_list))
-            
+            print(len(description_list), len(company_url), len(salary_list))
 
-        # df = pd.DataFrame()
-        # df['Company Name'] = company_name_list
-        # df['Company_url'] = company_url
-        # df['salary'] = salary_list
-        # df['description_list']= description_list
-        # df.to_csv(self.FILE_NAME, index=False)
+        df = pd.DataFrame()
+        df['Company Name'] = company_name_list
+        df['Company_url'] = company_url
+        df['salary'] = salary_list
+        df['description_list'] = description_list
+        df.to_csv(self.FILE_NAME, index=False)
 
 
 if __name__ == "__main__":
