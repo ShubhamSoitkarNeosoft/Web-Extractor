@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <title>Web Scrapper || Search Result</title>
+</head>
+<body>
+  <main class="container">
+    <!-- <hgroup>
+      <h1>Search Results for "{{keyword}}":</h1>
+      <a href="/export?keyword={{keyword}}" target="_blank">Export to file</a>
+    </hgroup> -->
+    <table role="grid">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Company</th>
+          <th>Location</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <!-- description_list, company_name_list, designation_list, salary_list, company_url,location_list, qualification_list -->
+      <tbody>
+    {% for i in company_name %}
+
+        <tr>
+            <td>{{i}}</td>
+            
+          
+        </tr>
+
+          {% endfor %} 
+          {% for i in location %}
+
+          <tr>
+              <td>{{i}}</td>
+            
+          </tr>   
+          {% endfor %}    
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
