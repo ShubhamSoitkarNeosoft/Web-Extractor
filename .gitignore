@@ -161,3 +161,4 @@ cython_debug/
 
 #csv file
 scrap_indeed_jobs.csv
+.~lock.indeed_jobs_python.csv#
