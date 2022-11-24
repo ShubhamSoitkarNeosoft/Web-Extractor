@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect, send_file,Response
 from extractor.indeed_extractor import ExtractIndeed
+import pandas as pd
 
 # from file import save_to_file
 
@@ -15,14 +16,19 @@ def home():
 
 @app.route("/search")
 def search():
-    keyword = request.args.get("keyword")
-    print('------',keyword)
-    if keyword == None:
+    web = request.form.get("web")
+    tech = request.form.get("tech")
+    print(web,tech)
+
+    if web == None or tech == None:
         return redirect("/")
-    scrap_naukri = ExtractIndeed(keyword)
+    
+    scrap_naukri = ExtractIndeed(tech)
     data = scrap_naukri.scrap_details()
+    scrap_naukri.generate_csv()
+
     company_name = data["company_name"]
-    location = data['location']
+    location =data['location']
   
             
     # print(description_list, company_name_list, designation_list, salary_list, company_url,location_list, qualification_list)
@@ -30,19 +36,25 @@ def search():
     return render_template("search.html",company_name=company_name,location=location)
 
 
+
 @app.route("/export")
 def export():
-    keyword = request.args.get("keyword")
+    # return send_file(pd.read_csv('indeed_jobs_python.csv'),download_name='logo.png',
+    #  as_attachment=True,mimetype="text/csv")
 
-    if keyword == None:
-        return redirect("/")
-
-    if keyword not in db:
-        return redirect(f"/search?keyword={keyword}")
-
-    save_to_file(keyword, db[keyword])
-
-    return send_file(f"{keyword}.csv", as_attachment=True)
+    # csv = pd.read_csv('indeed_jobs_python.csv')
+    import os
+    csv_dir = "./static"
+    csv_file = 'indeed_jobs_python.csv'
+    csv_path = os.path.join(csv_dir,csv_file)
+    return send_file(
+        csv_path,as_attachment=True
+    )
+    return Response(
+        csv_path,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=indeed_jobs_python.csv"})
 
 if __name__ == "__main__":
     app.run("0.0.0.0",debug=True)
