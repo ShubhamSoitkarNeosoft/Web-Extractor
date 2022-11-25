@@ -1,6 +1,6 @@
 
 from selenium import webdriver
-from selenium.webdriver.common.by import B
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
@@ -21,7 +21,6 @@ def extract_dice_jobs():
 
     driver.maximize_window()
     time.sleep(3)
-    pdb.set_trace()
 
     job_titles_list, company_name_list, location_list, job_types_list = [], [], [], []
 
